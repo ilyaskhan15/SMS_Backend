@@ -16,10 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from debug_toolbar.toolbar import debug_toolbar_urls
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('parents/', include('school_app.urls'))
-] + debug_toolbar_urls()
+    path('parents/', include('school_app.urls')),
+]
+
+from django.conf import settings
+
+if not getattr(settings, "TESTING", False):
+    from debug_toolbar.toolbar import debug_toolbar_urls
+    urlpatterns += debug_toolbar_urls()
