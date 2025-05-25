@@ -1,1 +1,6 @@
-<h1>You are my friend {{parents}}</h1>
+<h1>You are my friend {{ name }}</h1>
+<ul>
+    {% for parent in parents %}
+        <li>{{ parent.first_name }}</li>
+    {% endfor %}
+</ul>
