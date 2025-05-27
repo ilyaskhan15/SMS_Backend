@@ -19,7 +19,8 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('parents/', include('school_app.urls')),
+    path('api/', include('school_app.urls')),
+    
 ]
 
 from django.conf import settings
