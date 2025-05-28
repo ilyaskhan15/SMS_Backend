@@ -1,6 +1,11 @@
 from rest_framework import generics, permissions
+from .serializers import StudentRegistrationSerializer, StudentProfileSerializer
 from .models import StudentProfile
-from .serializers import StudentProfileSerializer
+
+class StudentRegistrationView(generics.CreateAPIView):
+    queryset = StudentProfile.objects.all()
+    serializer_class = StudentRegistrationSerializer
+    permission_classes = [permissions.AllowAny]
 
 class StudentProfileListCreateView(generics.ListCreateAPIView):
     queryset = StudentProfile.objects.all()

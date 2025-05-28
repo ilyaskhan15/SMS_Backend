@@ -11,7 +11,7 @@ class StudentProfile(models.Model):
     address = models.TextField(blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     admission_date = models.DateField(null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='static/student_profiles', blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True)
 
     def __str__(self):
         return f"{self.user.get_full_name()} ({self.roll_number})"
