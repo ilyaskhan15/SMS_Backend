@@ -54,3 +54,7 @@ class StudentRegistrationSerializer(serializers.ModelSerializer):
         user.save()
         student_profile = StudentProfile.objects.create(user=user, **validated_data)
         return student_profile
+
+class StudentLoginSerializer(serializers.Serializer):
+    roll_number = serializers.CharField()
+    email = serializers.EmailField()
