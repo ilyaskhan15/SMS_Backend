@@ -5,14 +5,14 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
-    roll_number = models.CharField(max_length=20, unique=True)
-    grade = models.CharField(max_length=10)
-    section = models.CharField(max_length=5, blank=True)
-    phone = models.CharField(max_length=15, blank=True)
-    address = models.TextField(blank=True)
+    roll_number = models.CharField(max_length=20, unique=False, blank=True, null=True)
+    grade = models.CharField(max_length=10, blank=True, null=True)
+    section = models.CharField(max_length=5, blank=True, null=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
     admission_date = models.DateField(null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.get_full_name()} ({self.roll_number})"

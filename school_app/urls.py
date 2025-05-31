@@ -5,7 +5,7 @@ from .views import (
     AttendanceListCreateView, AttendanceRetrieveUpdateDestroyView, 
     StudentRegistrationView, SubjectListCreateView,
     ResultListCreateView, ResultRetrieveUpdateDestroyView,
-    StudentLoginView
+    StudentLoginView, VerifyEmailView
 )
 
 urlpatterns = [
@@ -29,4 +29,7 @@ urlpatterns = [
     path('subjects/', SubjectListCreateView.as_view(), name='subject-list-create'),
     path('results/', ResultListCreateView.as_view(), name='result-list-create'),
     path('results/<int:pk>/', ResultRetrieveUpdateDestroyView.as_view(), name='result-detail'),
+
+    # Email verification
+    path('verify-email/<int:uid>/<str:token>/', VerifyEmailView.as_view(), name='verify-email'),
 ]
