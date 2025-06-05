@@ -37,11 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "corsheaders",
     'rest_framework',
     'SMS_App',  # Custom application for the SMS project
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -129,3 +131,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTH_USER_MODEL = 'SMS_App.SchoolUser'  # Custom user model
+
+CORS_ALLOW_ALL_ORIGINS = True
+# OR (recommended for production)
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+# ]
