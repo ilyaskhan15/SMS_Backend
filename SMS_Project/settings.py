@@ -137,3 +137,12 @@ CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:5173",
 # ]
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ilyaskhanqwer0088@gmail.com'           # <-- Replace with your Gmail address
+EMAIL_HOST_PASSWORD = 'oxmg yamn uaft swbh'    # <-- Replace with your Gmail App Password
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'ilyaskhanqwer0088@gmail.com'        # <-- Replace with your Gmail address

@@ -12,6 +12,8 @@ from .serializers import (
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 from django.conf import settings
+from datetime import timedelta
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -62,7 +64,8 @@ class AuthViewSet(viewsets.GenericViewSet):
             try:
                 user = User.objects.get(email=email)
                 token = get_random_string(64)
-                PasswordResetToken.objects.create(user=user, token=token, expires_at=None)
+                expires_at = timezone.now() + timedelta(hours=1)
+                PasswordResetToken.objects.create(user=user, token=token, expires_at=expires_at)
                 reset_link = f"http://localhost:8000/api/auth/reset-password?token={token}"
                 send_mail(
                     'Password Reset',
