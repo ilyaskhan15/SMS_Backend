@@ -1,5 +1,8 @@
 from rest_framework import serializers
-from .models import SchoolUser
+from .models import (
+    SchoolUser, StudentProfile, Subject, Attendance, ExamResult,
+    Assignment, AssignmentSubmission, Notice, TimeTable, Fee, TeacherProfile
+)
 
 class RegisterSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(write_only=True)
@@ -54,3 +57,95 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchoolUser
         fields = ['id', 'email', 'first_name', 'last_name', 'user_type']
+
+class StudentProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = StudentProfile
+        fields = [
+            'user', 'admission_number', 'current_class', 'date_of_birth',
+            'address', 'phone', 'parent_name', 'parent_phone', 'photo'
+        ]
+
+class SubjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subject
+        fields = ['id', 'name', 'code']
+
+class AttendanceSerializer(serializers.ModelSerializer):
+    subject = SubjectSerializer(read_only=True)
+    class Meta:
+        model = Attendance
+        fields = ['id', 'student', 'date', 'status', 'subject']
+
+class ExamResultSerializer(serializers.ModelSerializer):
+    subject = SubjectSerializer(read_only=True)
+    percentage = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ExamResult
+        fields = [
+            'id', 'student', 'subject', 'exam_name', 'marks_obtained',
+            'max_marks', 'remarks', 'date', 'percentage'
+        ]
+
+    def get_percentage(self, obj):
+        return obj.percentage()
+
+class AssignmentSerializer(serializers.ModelSerializer):
+    subject = SubjectSerializer(read_only=True)
+    assigned_by = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Assignment
+        fields = [
+            'id', 'title', 'description', 'subject', 'due_date',
+            'assigned_by', 'file'
+        ]
+
+class AssignmentSubmissionSerializer(serializers.ModelSerializer):
+    assignment = AssignmentSerializer(read_only=True)
+    student = StudentProfileSerializer(read_only=True)
+
+    class Meta:
+        model = AssignmentSubmission
+        fields = [
+            'id', 'assignment', 'student', 'submitted_file',
+            'submitted_at', 'remarks', 'marks_obtained'
+        ]
+
+class NoticeSerializer(serializers.ModelSerializer):
+    posted_by = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Notice
+        fields = ['id', 'title', 'description', 'date_posted', 'posted_by']
+
+class TeacherProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = TeacherProfile
+        fields = [
+            'user', 'employee_id', 'department', 'phone', 'address', 'photo'
+        ]
+
+class TimeTableSerializer(serializers.ModelSerializer):
+    subject = SubjectSerializer(read_only=True)
+    teacher = TeacherProfileSerializer(read_only=True)
+
+    class Meta:
+        model = TimeTable
+        fields = [
+            'id', 'day', 'subject', 'start_time', 'end_time', 'teacher'
+        ]
+
+class FeeSerializer(serializers.ModelSerializer):
+    student = StudentProfileSerializer(read_only=True)
+
+    class Meta:
+        model = Fee
+        fields = [
+            'id', 'student', 'amount', 'due_date', 'paid', 'payment_date'
+        ]

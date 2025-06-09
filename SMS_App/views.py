@@ -4,10 +4,10 @@ from rest_framework.response import Response
 from rest_framework import viewsets, status, permissions, mixins
 from rest_framework.decorators import action
 from django.contrib.auth import authenticate, get_user_model
-from .models import PasswordResetToken
+from .models import Assignment, AssignmentSubmission, Attendance, ExamResult, Notice, PasswordResetToken, StudentProfile, Fee, SchoolUser, Subject, TeacherProfile, TimeTable
 from .serializers import (
-    RegisterSerializer, LoginSerializer, ForgotPasswordSerializer,
-    ResetPasswordSerializer, UserSerializer
+    AssignmentSerializer, AssignmentSubmissionSerializer, AttendanceSerializer, ExamResultSerializer, FeeSerializer, NoticeSerializer, RegisterSerializer, LoginSerializer, ForgotPasswordSerializer,
+    ResetPasswordSerializer, SubjectSerializer, TeacherProfileSerializer, TimeTableSerializer, UserSerializer, StudentProfileSerializer
 )
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
@@ -109,3 +109,84 @@ class UserViewSet(mixins.ListModelMixin,
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+class StudentProfileViewSet(viewsets.ModelViewSet):
+    queryset = StudentProfile.objects.all()
+    serializer_class = StudentProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Students can only see their own profile
+        user = self.request.user
+        if user.user_type == SchoolUser.UserType.STUDENT:
+            return StudentProfile.objects.filter(user=user)
+        return super().get_queryset()
+
+class SubjectViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Subject.objects.all()
+    serializer_class = SubjectSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class AttendanceViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Attendance.objects.all()
+    serializer_class = AttendanceSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.user_type == SchoolUser.UserType.STUDENT:
+            return Attendance.objects.filter(student__user=user)
+        return super().get_queryset()
+
+class ExamResultViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = ExamResult.objects.all()
+    serializer_class = ExamResultSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.user_type == SchoolUser.UserType.STUDENT:
+            return ExamResult.objects.filter(student__user=user)
+        return super().get_queryset()
+
+class AssignmentViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Assignment.objects.all()
+    serializer_class = AssignmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class AssignmentSubmissionViewSet(viewsets.ModelViewSet):
+    queryset = AssignmentSubmission.objects.all()
+    serializer_class = AssignmentSubmissionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.user_type == SchoolUser.UserType.STUDENT:
+            return AssignmentSubmission.objects.filter(student__user=user)
+        return super().get_queryset()
+
+class NoticeViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Notice.objects.all()
+    serializer_class = NoticeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class TeacherProfileViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = TeacherProfile.objects.all()
+    serializer_class = TeacherProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class TimeTableViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = TimeTable.objects.all()
+    serializer_class = TimeTableSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class FeeViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Fee.objects.all()
+    serializer_class = FeeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.user_type == SchoolUser.UserType.STUDENT:
+            return Fee.objects.filter(student__user=user)
+        return super().get_queryset()
