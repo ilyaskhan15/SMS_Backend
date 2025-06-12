@@ -38,12 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "debug_toolbar",
     "corsheaders",
     'rest_framework',
     'SMS_App',  # Custom application for the SMS project
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -150,3 +152,10 @@ EMAIL_HOST_USER = 'ilyaskhanqwer0088@gmail.com'           # <-- Replace with you
 EMAIL_HOST_PASSWORD = 'oxmg yamn uaft swbh'    # <-- Replace with your Gmail App Password
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'ilyaskhanqwer0088@gmail.com'        # <-- Replace with your Gmail address
+
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
